@@ -14,16 +14,38 @@ def solve(waffle, R, C, H, V, cid):
   possible = True
   nchip_in_a_row = nchip // H
   cnt = 0
-  r = R
+  rows = []
+  cols = []
   for r in range(R):
     for c in range(C):
-       
+       if waffle[r][c] == '@':
+         cnt += 1
     if cnt == nchip_in_a_row:
       cnt = 0
-      r -= 1
+      rows.append(r)
     elif cnt > nchip_in_a_row:
       possible = False
       break
+  
+  if possible:
+    nchip_in_a_col = nchip // V
+    for c in range(C):
+      for r in range(R):
+        if waffle[r][c] == '@':
+          cnt += 1
+      if cnt == nchip_in_a_col:
+        cnt = 0
+        cols.append(c)
+      elif cnt > nchip_in_a_col:
+        possible = False
+        break
+  
+  
+
+  if possible:
+    print('Case #%d: POSSIBLE' % (cid+1))
+  else:
+    print('Case #%d: IMPOSSIBLE' % (cid+1))
 
   pass
 
