@@ -1,4 +1,11 @@
 from functools import reduce
+import decimal
+from decimal import Decimal
+
+decimal.getcontext().rounding = decimal.ROUND_HALF_UP
+
+def round1(num):
+  return int(Decimal(num).quantize(Decimal('1')))
 
 def solve(N, L, C, cid):
   need = [0] * (N+1)
@@ -32,7 +39,7 @@ def solve(N, L, C, cid):
   #   C1.append(best_choice)
   # print(C1)
   C1.sort()
-  acc = reduce(lambda x, y: x + y, map(lambda c: round(c*100/N), C))
+  acc = reduce(lambda x, y: x + y, map(lambda c: round1(c*100/N), C))
   # print('acc:%d' % acc)
   for c in C1:
     unknown -= c
@@ -40,21 +47,22 @@ def solve(N, L, C, cid):
       unknown += c
       break
     if c > 0:
-      acc += 1 + round(c*100/N)
-  
+      acc += 1 + round1(c*100/N)
+      # print('acc:%d' % acc)
+  # print('acc2:%d' % acc)
   n_best_choice = 0
   if best_choice > 0 and unknown > 0:
     n_best_choice = unknown // best_choice
 
   for i in range(n_best_choice):
-    acc += round(best_choice*100/N)
+    acc += round1(best_choice*100/N)
     unknown -= best_choice
     if unknown < 0:
       unknown += best_choice
       break
   
   if unknown > 0:
-    acc += round(unknown*100/N)
+    acc += round1(unknown*100/N)
 
   print('Case #%d: %d' % (cid+1, acc))
 
